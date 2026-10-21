@@ -184,6 +184,7 @@ export function CanvasNodePanelOverlay({
             ref={panelRef}
             data-canvas-no-zoom
             data-canvas-node-panel
+            data-popover-anchor-container
             data-canvas-wheel-scroll
             className={`thin-scrollbar absolute max-w-[calc(100%_-_24px)] ${allowOverflow ? "overflow-visible" : "overflow-y-auto"}`}
             style={{ left: 0, top: 0, transform: `translate3d(${initialPosition.left}px, ${initialPosition.top}px, 0)`, width: initialWidth, maxHeight: allowOverflow ? "none" : "calc(100% - 84px)", zIndex }}

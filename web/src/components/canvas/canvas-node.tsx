@@ -198,6 +198,7 @@ export const CanvasNode = React.memo(function CanvasNode({
         <div
             ref={nodeRef}
             data-node-id={data.id}
+            data-popover-anchor-container
             data-node-lod={effectiveRenderLOD}
             className={`node-element absolute flex select-none flex-col ${dragOffset ? "cursor-grabbing" : data.type === CanvasNodeType.Drawing ? "cursor-pointer" : "cursor-default"} ${isSelected && data.type === CanvasNodeType.Video ? "z-[var(--z-node-toolbar)]" : isSelected || isFocusRelated || isConnectionTarget ? "z-[var(--z-node-active)]" : "z-[var(--z-node)]"}`}
             style={{

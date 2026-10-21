@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode, type RefObject } from "react";
-import { App, Button, Dropdown, Input, Modal, Tag, Tooltip } from "antd";
+import { App, Button, Input, Modal, Tag, Tooltip } from "antd";
+import { CanvasAnchoredDropdown as Dropdown } from "./canvas-anchored-dropdown";
 import type { MenuProps } from "antd";
 import { Camera, Check, ChevronDown, ChevronRight, Ellipsis, Grid3x3, Images, Plus, SlidersHorizontal, UserRound } from "lucide-react";
 
@@ -350,6 +351,7 @@ export function CanvasNodeToolbar({
     return (
         <div
             ref={toolbarRef}
+            data-popover-anchor-container
             className="canvas-node-toolbar absolute z-[var(--z-node-toolbar)] -translate-x-1/2 -translate-y-full"
             style={{ left: 0, top: 0, transform: `translate3d(${anchor.left}px, ${anchor.top}px, 0)`, width: "max-content", maxWidth: containerWidth, color: theme.node.text }}
             onMouseEnter={() => onKeep(node.id)}
@@ -506,6 +508,11 @@ function NodeDockMenuButton({ menuId, label, icon, tools, openMenuId, onOpenChan
     return (
         <Dropdown
             open={open}
+            onAnchorMove={() => {
+                keepSplitMenuOpenRef.current = false;
+                setSplitPanelOpen(false);
+                onOpenChange(menuId, false);
+            }}
             trigger={["click"]}
             placement={placement}
             autoAdjustOverflow

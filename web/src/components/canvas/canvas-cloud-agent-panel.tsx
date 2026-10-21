@@ -961,6 +961,7 @@ export function CanvasCloudAgentPanel({ canvasId, domainProjectId, nodeCount, se
                                 Record<`--${string}`, string>
                         }
                         aria-label="Agent 工作台"
+                        data-popover-anchor-container
                         data-canvas-no-zoom
                         data-canvas-wheel-scroll
                         {...panelLayout.pointerHandlers}
@@ -1127,7 +1128,7 @@ export function CanvasCloudAgentPanel({ canvasId, domainProjectId, nodeCount, se
                                         references={[...references, ...buildSkillMentionReferences(installedSkills)]}
                                         slashSkills={installedSkills}
                                         includeAssetLibrary={false}
-                                        submitAccessory={<AgentContextRing view={presentAgentContextUsage(contextUsage)} />}
+                                        submitAccessory={<AgentContextRing view={presentAgentContextUsage(contextUsage)} theme={theme} />}
                                         footer={connectorsVisible ? <AgentConnectorsBar onClose={() => setConnectorsVisible(false)} /> : null}
                                         left={
                                             <ComposerControls
