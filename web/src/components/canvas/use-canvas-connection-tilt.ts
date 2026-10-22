@@ -2,11 +2,7 @@ import { useLayoutEffect, type RefObject } from "react";
 import { canvasConnectionTilt } from "@/lib/canvas/canvas-connection-tilt";
 
 /** Track captured connection pointers without re-rendering the node's media. */
-export function useCanvasConnectionTilt(
-    nodeRef: RefObject<HTMLDivElement | null>,
-    shellRef: RefObject<HTMLDivElement | null>,
-    initial: ReturnType<typeof canvasConnectionTilt>,
-) {
+export function useCanvasConnectionTilt(nodeRef: RefObject<HTMLDivElement | null>, shellRef: RefObject<HTMLDivElement | null>, initial: ReturnType<typeof canvasConnectionTilt>) {
     const active = Boolean(initial);
     const { rotateX = 0, rotateY = 0, glareX = "50%", glareY = "50%" } = initial || {};
 

@@ -31,9 +31,9 @@ test("both themes use neutral gray droplets with zoom-compensated widths", () =>
         const markup = renderToStaticMarkup(<CanvasConnectionBeam pathD="M 0 0 C 100 0 100 200 200 200" color={theme.connection.beam} />);
         expect(markup).toContain(`stroke="${theme.connection.beam}"`);
         expect(markup).toContain(`stroke-width="${CANVAS_CONNECTION_STROKE_WIDTH}"`);
-        expect(markup).toContain('pointer-events:none');
+        expect(markup).toContain("pointer-events:none");
         expect(markup).toContain(`stroke-width:calc(${CANVAS_CONNECTION_STROKE_WIDTH}px / var(--canvas-committed-scale, 1))`);
-        expect(markup).toContain('stroke-width:calc(2.1px / var(--canvas-committed-scale, 1))');
+        expect(markup).toContain("stroke-width:calc(2.1px / var(--canvas-committed-scale, 1))");
     }
 });
 
@@ -54,6 +54,6 @@ test("droplet layers share the same leading edge and thicken from tail to head",
         expect(widths[index] - widths[index - 1]).toBeLessThanOrEqual(0.31);
         expect(opacities[index]).toBeGreaterThan(opacities[index - 1]);
     }
-    expect(markup).toContain('--canvas-beam-offset:-28px');
+    expect(markup).toContain("--canvas-beam-offset:-28px");
     expect(markup).toContain('stroke-linecap="round"');
 });

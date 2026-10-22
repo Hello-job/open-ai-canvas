@@ -7,7 +7,10 @@ const back = { ...front, id: "back" };
 const options = { nodes: [front, back], current: { nodeId: "source", handleType: "source" as const }, point: { x: 300, y: 350 }, radius: 56, bodyNodeId: front.id, scriptScrollTopById: {}, canConnect: () => true };
 
 test("visible node wins regardless of creation order and geometric overlap", () => {
-    for (const nodes of [[front, back], [back, front]]) {
+    for (const nodes of [
+        [front, back],
+        [back, front],
+    ]) {
         expect(resolveCanvasConnectionTarget({ ...options, nodes }).nodeId).toBe(front.id);
     }
 });

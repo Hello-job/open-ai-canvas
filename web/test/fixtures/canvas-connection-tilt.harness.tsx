@@ -25,8 +25,13 @@ test("captured pointers track the flat bounds, coalesce frames, respect motion s
     const root = createRoot(host);
     const frames = new Map<number, FrameRequestCallback>();
     let frameId = 0;
-    window.requestAnimationFrame = (callback) => { frames.set(++frameId, callback); return frameId; };
-    window.cancelAnimationFrame = (id) => { frames.delete(id); };
+    window.requestAnimationFrame = (callback) => {
+        frames.set(++frameId, callback);
+        return frameId;
+    };
+    window.cancelAnimationFrame = (id) => {
+        frames.delete(id);
+    };
     const preference = { matches: false };
     window.matchMedia = (() => preference) as typeof window.matchMedia;
     let renders = 0;
@@ -35,10 +40,18 @@ test("captured pointers track the flat bounds, coalesce frames, respect motion s
         const node = useRef<HTMLDivElement>(null);
         const shell = useRef<HTMLDivElement>(null);
         useCanvasConnectionTilt(node, shell, active ? { rotateX: 0, rotateY: -8, glareX: "0%", glareY: "50%" } : undefined);
-        return <div ref={node}><div ref={shell} /></div>;
+        return (
+            <div ref={node}>
+                <div ref={shell} />
+            </div>
+        );
     }
     const move = (x: number, y: number) => window.dispatchEvent(new dom.PointerEvent("pointermove", { clientX: x, clientY: y, isPrimary: true }) as unknown as PointerEvent);
-    const flush = () => { const pending = [...frames.values()]; frames.clear(); pending.forEach((callback) => callback(16)); };
+    const flush = () => {
+        const pending = [...frames.values()];
+        frames.clear();
+        pending.forEach((callback) => callback(16));
+    };
     try {
         await act(async () => root.render(<Harness active />));
         const node = host.firstElementChild as HTMLElement;

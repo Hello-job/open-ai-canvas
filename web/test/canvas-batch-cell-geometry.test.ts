@@ -67,7 +67,10 @@ describe("batch cell connection geometry", () => {
     });
 
     test("reverse drag follows the pointer and retains its fixed cell port across scrolling", () => {
-        for (const scroll of [{ top: 0, left: 0 }, { top: 100, left: 30 }]) {
+        for (const scroll of [
+            { top: 0, left: 0 },
+            { top: 100, left: 30 },
+        ]) {
             const cell = batchCellAnchor(table, targetHandle, scroll)!;
             const reverse = activeConnectionPath(table, { nodeId: table.id, handleType: "target", handleId: targetHandle }, { x: 150, y: 70 }, 0, scroll);
             expect(reverse.startsWith("M 150 70 ")).toBe(true);
@@ -78,7 +81,10 @@ describe("batch cell connection geometry", () => {
     });
 
     test("ordinary drafts follow pointer movement inside a node in both directions", () => {
-        for (const pointer of [{ x: 600, y: 210 }, { x: 700, y: 350 }]) {
+        for (const pointer of [
+            { x: 600, y: 210 },
+            { x: 700, y: 350 },
+        ]) {
             const forward = activeConnectionPath(source, { nodeId: source.id, handleType: "source" }, pointer);
             expect(forward.startsWith("M 300 100 ")).toBe(true);
             expect(forward.endsWith(`${pointer.x} ${pointer.y}`)).toBe(true);

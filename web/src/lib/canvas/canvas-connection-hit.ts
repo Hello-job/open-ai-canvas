@@ -11,7 +11,16 @@ export type CanvasConnectionDropTarget = {
     isNearNode: boolean;
 };
 
-export function resolveCanvasConnectionTarget({ nodes, current, point, radius, bodyNodeId, scriptScrollTopById, batchScrollById, canConnect }: {
+export function resolveCanvasConnectionTarget({
+    nodes,
+    current,
+    point,
+    radius,
+    bodyNodeId,
+    scriptScrollTopById,
+    batchScrollById,
+    canConnect,
+}: {
     nodes: CanvasNodeData[];
     current: ConnectionHandle;
     point: Position;
@@ -22,9 +31,8 @@ export function resolveCanvasConnectionTarget({ nodes, current, point, radius, b
     canConnect: (node: CanvasNodeData) => boolean;
 }): CanvasConnectionDropTarget {
     const candidates = nodes.filter((node) => !isHiddenBatchChild(node, nodes) && !isNodeHiddenByCollapsedFrame(node, nodes) && !isFrameNode(node));
-    const handleFor = (node: CanvasNodeData) => node.type === CanvasNodeType.Script
-        ? storyboardHandleAtY(node, point.y, scriptScrollTopById[node.id] || 0)
-        : node.type === CanvasNodeType.BatchTable ? batchReferenceHandleAtY(node, point.y, radius) : undefined;
+    const handleFor = (node: CanvasNodeData) =>
+        node.type === CanvasNodeType.Script ? storyboardHandleAtY(node, point.y, scriptScrollTopById[node.id] || 0) : node.type === CanvasNodeType.BatchTable ? batchReferenceHandleAtY(node, point.y, radius) : undefined;
     const targetFor = (node: CanvasNodeData, handleId = handleFor(node)): CanvasConnectionDropTarget => {
         const missingHandle = (node.type === CanvasNodeType.Script || node.type === CanvasNodeType.BatchTable) && !handleId;
         return { nodeId: !missingHandle && canConnect(node) ? node.id : null, handleId, isNearNode: true };
