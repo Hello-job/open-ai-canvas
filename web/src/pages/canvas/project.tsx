@@ -39,7 +39,6 @@ import { AppModal } from "@/components/ui/product/app-modal";
 import { getNodeSpec } from "@/constant/canvas";
 import { CanvasConfigComposer } from "@/components/canvas/canvas-config-composer";
 import { CanvasConfigNodePanel } from "@/components/canvas/canvas-config-node-panel";
-import { CanvasCloudAgentPanel } from "@/components/canvas/canvas-cloud-agent-panel";
 import { CanvasActiveTaskPanel } from "@/components/canvas/canvas-active-task-panel";
 import { CanvasProjectSidebar } from "@/components/canvas/canvas-project-sidebar";
 import { CanvasProjectAssetModal } from "@/components/canvas/canvas-project-asset-modal";
@@ -144,6 +143,7 @@ import { removeCanvasDrawing } from "@/lib/canvas/canvas-drawing-storage";
 import { useCanvasConnectionController } from "./use-canvas-connection-controller";
 import { useCanvasOperationHistory } from "./use-canvas-operation-history";
 import { useCanvasAssistantVisibility } from "./use-canvas-assistant-visibility";
+import { useGlobalAgentStore } from "@/stores/use-global-agent-store";
 import { useCanvasActiveTasks } from "./use-canvas-active-tasks";
 import { useCanvasStyleWorkflow } from "./use-canvas-style-workflow";
 import { useCanvasPrevis } from "./use-canvas-previs";
@@ -2599,6 +2599,29 @@ function CanvasViewportPage() {
         focusCanvasNode(nodeId);
     };
     const handleAgentFocusNode = useCallback((nodeId: string) => agentFocusNodeRef.current(nodeId), []);
+    // 平台唯一的 Agent 面板挂在布局上；画布只发布自己的上下文。画布加载完成前不发布，避免以未保存画布绑定运行。
+    const publishAgentCanvas = useGlobalAgentStore((state) => state.setCanvas);
+    useEffect(() => {
+        if (!projectLoaded || !projectId) return;
+        publishAgentCanvas({
+            canvasId: projectId,
+            domainProjectId: currentProject?.projectId,
+            canvasNodes: nodes,
+            runningNodeId,
+            nodeCount: nodes.length,
+            selectedNodeIds: agentSelectedNodeIds,
+            references: agentMentionReferences,
+            prefillRequest: agentPrefillRequest,
+            onFocusNode: handleAgentFocusNode,
+        });
+    }, [projectLoaded, projectId, currentProject?.projectId, nodes, runningNodeId, agentSelectedNodeIds, agentMentionReferences, agentPrefillRequest, handleAgentFocusNode, publishAgentCanvas]);
+    // 离开画布（卸载或切换到另一个画布）时撤回上下文：之后的对话轮次不再绑定这个画布。
+    useEffect(() => {
+        return () => {
+            const current = useGlobalAgentStore.getState().canvas;
+            if (current?.canvasId === projectId) useGlobalAgentStore.getState().setCanvas(null);
+        };
+    }, [projectId]);
     if (!projectLoaded && loadError)
         return (
             <main className="flex h-full flex-col items-center justify-center gap-4">
@@ -2911,22 +2934,6 @@ function CanvasViewportPage() {
                                     ) : null}
                                 </div>
 
-                                <div className="contents">
-                                    <CanvasCloudAgentPanel
-                                        canvasId={projectId}
-                                        domainProjectId={currentProject?.projectId}
-                                        canvasNodes={nodes}
-                                        runningNodeId={runningNodeId}
-                                        nodeCount={nodes.length}
-                                        selectedNodeIds={agentSelectedNodeIds}
-                                        references={agentMentionReferences}
-                                        prefillRequest={agentPrefillRequest}
-                                        open={assistantOpen}
-                                        onOpen={openAgent}
-                                        onCollapse={closeAgent}
-                                        onFocusNode={handleAgentFocusNode}
-                                    />
-                                </div>
                             </div>
 
                             {angleNode?.metadata?.content ? (
