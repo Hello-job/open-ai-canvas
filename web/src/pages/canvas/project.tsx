@@ -1102,9 +1102,7 @@ function CanvasViewportPage() {
     const {
         cancelPendingConnectionCreate,
         closeConnectionCreateMenu,
-        connectionTargetAnchorRatio,
         connectionTargetNodeId,
-        connectionTargetHandleId,
         connectionApproach,
         connectionReplaceHover,
         connectingParams,
@@ -2762,16 +2760,11 @@ function CanvasViewportPage() {
                                                 viewport={viewport}
                                                 theme={theme}
                                                 displayConnections={visibleDisplayConnections}
-                                                selectedConnectionId={selectedConnectionId}
-                                                relatedConnectionIds={relatedHighlight.connectionIds}
                                                 scriptScrollTopById={scriptScrollTopById}
                                                 batchScrollById={batchScrollById}
-                                                connectionTargetHandleId={connectionTargetHandleId}
                                                 connectingParams={connectingParams}
                                                 batchConnectionPreview={batchConnectionPreview}
                                                 mouseWorld={mouseWorld}
-                                                connectionTargetNodeId={connectionTargetNodeId}
-                                                connectionTargetAnchorRatio={connectionTargetAnchorRatio}
                                                 nodeById={nodeById}
                                                 selectionBox={selectionBox}
                                                 selectedNodeBounds={selectedNodeBounds}
@@ -2802,9 +2795,6 @@ function CanvasViewportPage() {
                                                     relatedConnectionIds={relatedHighlight.connectionIds}
                                                     scriptScrollTopById={scriptScrollTopById}
                                                     batchScrollById={batchScrollById}
-                                                    connectionTargetHandleId={connectionTargetHandleId}
-                                                    connectingParams={connectingParams}
-                                                    mouseWorld={mouseWorld}
                                                     connectionTargetNodeId={connectionTargetNodeId}
                                                     nodeById={nodeById}
                                                     visibleNodes={visibleNodes}
