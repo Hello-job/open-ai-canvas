@@ -32,8 +32,21 @@ test("captured pointers track the flat bounds, coalesce frames, respect motion s
     window.cancelAnimationFrame = (id) => {
         frames.delete(id);
     };
-    const preference = { matches: false };
-    window.matchMedia = (() => preference) as typeof window.matchMedia;
+    const preferenceListeners = new Set<() => void>();
+    const preference = {
+        matches: false,
+        addEventListener: (_event: string, listener: () => void) => {
+            preferenceListeners.add(listener);
+        },
+        removeEventListener: (_event: string, listener: () => void) => {
+            preferenceListeners.delete(listener);
+        },
+    };
+    window.matchMedia = (() => preference as unknown as MediaQueryList) as typeof window.matchMedia;
+    const setReducedMotion = (matches: boolean) => {
+        preference.matches = matches;
+        for (const listener of preferenceListeners) listener();
+    };
     let renders = 0;
     function Harness({ active }: { active: boolean }) {
         renders++;
@@ -53,11 +66,16 @@ test("captured pointers track the flat bounds, coalesce frames, respect motion s
         pending.forEach((callback) => callback(16));
     };
     try {
+        setReducedMotion(true);
         await act(async () => root.render(<Harness active />));
         const node = host.firstElementChild as HTMLElement;
         const shell = node.firstElementChild as HTMLElement;
         // A half-scale node: measure its stable screen bounds, not the tilted shell.
         node.getBoundingClientRect = () => ({ left: 100, top: 200, width: 200, height: 100 }) as DOMRect;
+        expect(shell.style.getPropertyValue("--connection-tilt-x")).toBe("");
+        expect(shell.style.getPropertyValue("--connection-glare-x")).toBe("");
+        setReducedMotion(false);
+        expect(shell.style.getPropertyValue("--connection-tilt-x")).toBe("0deg");
         const before = renders;
         move(100, 200);
         move(300, 300);
@@ -67,10 +85,15 @@ test("captured pointers track the flat bounds, coalesce frames, respect motion s
         expect(shell.style.getPropertyValue("--connection-tilt-y")).toBe("8deg");
         expect(shell.style.getPropertyValue("--connection-glare-x")).toBe("100%");
         expect(renders).toBe(before);
-        preference.matches = true;
+        setReducedMotion(true);
+        expect(shell.style.getPropertyValue("--connection-tilt-x")).toBe("");
+        expect(shell.style.getPropertyValue("--connection-glare-x")).toBe("");
         move(100, 200);
         expect(frames.size).toBe(0);
-        preference.matches = false;
+        setReducedMotion(false);
+        expect(frames.size).toBe(1);
+        flush();
+        expect(shell.style.getPropertyValue("--connection-tilt-x")).not.toBe("");
         host.className = "no-motion";
         move(100, 200);
         expect(frames.size).toBe(0);
