@@ -29,6 +29,7 @@ type CanvasProjectWorldLayersProps = {
     scriptScrollTopById: Record<string, number>;
     batchScrollById?: Record<string, BatchScroll>;
     connectionTargetNodeId: string | null;
+    isConnecting: boolean;
     connectionApproach: CanvasConnectionApproach;
     nodeById: Map<string, CanvasNodeData>;
     visibleNodes: CanvasNodeData[];
@@ -168,8 +169,9 @@ export const CanvasProjectWorldLayers = memo(function CanvasProjectWorldLayers(p
                         isRelated={props.relatedNodeIds.has(node.id)}
                         isFocusRelated={props.activeNodeId === node.id}
                         isConnectionTarget={props.connectionTargetNodeId === node.id || props.batchConnectionPreview?.targetNodeId === node.id}
+                        isConnecting={props.isConnecting}
                         connectionApproach={props.connectionApproach?.nodeId === node.id ? props.connectionApproach.point : undefined}
-                        forceInputVisible={Boolean(props.batchConnectionPreview)}
+                        forceInputMounted={Boolean(props.batchConnectionPreview)}
                         batchCount={props.batchChildCountById.get(node.id) || 0}
                         batchExpanded={Boolean(node.metadata?.imageBatchExpanded)}
                         batchPreviewNodes={batchPreviews.get(node.id)}

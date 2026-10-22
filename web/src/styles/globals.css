@@ -8459,18 +8459,48 @@ html:not(.dark) .canvas-generation-settings-trigger.ant-btn[aria-expanded="true"
 
 .canvas-node-shell {
         box-shadow: none;
-        transition: transform 160ms ease-out;
+        transform-origin: center;
+        transition: transform var(--motion-dur-slow-calc) var(--motion-ease-out);
     }
 
     /* Only a valid connection approach tilts; selection and ordinary hover stay flat. */
     .canvas-node-shell[data-connection-tilt="true"] {
-        transform: perspective(900px) rotateX(var(--connection-tilt-x)) rotateY(var(--connection-tilt-y));
+        transform: perspective(900px) rotateX(var(--connection-tilt-x, 0deg)) rotateY(var(--connection-tilt-y, 0deg));
+        transition-duration: var(--motion-dur-fast-calc);
         will-change: transform;
     }
 
-    .no-motion .canvas-node-shell[data-connection-tilt="true"] {
+    .canvas-node-shell::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: var(--node-z-overlay);
+        border-radius: inherit;
+        pointer-events: none;
+        opacity: 0;
+        background: radial-gradient(ellipse at var(--connection-glare-x, 50%) var(--connection-glare-y, 50%), color-mix(in srgb, var(--color-neutral-0) 28%, transparent), transparent 65%);
+        box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-neutral-0) 24%, transparent);
+        transition: opacity var(--motion-dur-base-calc) var(--motion-ease-out);
+    }
+
+    .canvas-node-shell[data-connection-tilt="true"]::after {
+        opacity: 1;
+    }
+
+    .no-motion .canvas-node-shell {
         transform: none;
         transition: none;
+    }
+
+    .no-motion .canvas-node-shell::after {
+        opacity: 0;
+        transition: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .canvas-node-shell::after {
+            display: none;
+        }
     }
 
     .canvas-node-inline-action {

@@ -2787,6 +2787,7 @@ function CanvasViewportPage() {
                                             <CanvasNodeGraphContext.Provider value={nodeGraphContext}>
                                                 <CanvasProjectWorldLayers
                                                     connectionApproach={connectionApproach}
+                                                    isConnecting={Boolean(connectingParams || batchConnectionPreview)}
                                                     projectId={projectId}
                                                     viewportScale={viewport.k}
                                                     connectionLayerBounds={connectionLayerBounds}
