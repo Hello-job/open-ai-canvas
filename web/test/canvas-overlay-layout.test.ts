@@ -29,7 +29,12 @@ describe("canvas floating overlay layout", () => {
     });
 
     for (const k of [0.25, 1, 2]) {
-        for (const offset of [{ x: -3000, y: 0 }, { x: 3000, y: 0 }, { x: 0, y: -3000 }, { x: 0, y: 3000 }]) {
+        for (const offset of [
+            { x: -3000, y: 0 },
+            { x: 3000, y: 0 },
+            { x: 0, y: -3000 },
+            { x: 0, y: 3000 },
+        ]) {
             test(`controls follow pan and drag beyond the viewport at zoom ${k}: ${offset.x}, ${offset.y}`, () => {
                 const bounds = canvasOverlayBounds({ width: 1024, height: 720 });
                 const viewport = { x: 0, y: 0, k };
