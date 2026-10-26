@@ -111,7 +111,7 @@ export function ModelIconPicker({ value, onChange }: { value?: string; onChange?
             <div className="flex min-w-0 items-center rounded-md border border-border bg-background">
                 <button
                     type="button"
-                    className={cn("flex min-h-8 min-w-0 flex-1 items-center gap-2 rounded-md px-2.5 py-2 text-left text-sm hover:bg-surface-hover pointer-coarse:min-h-11", pickerFocusClassName)}
+                    className={cn("flex min-h-8 min-w-0 flex-1 items-center gap-2 rounded-md px-2 py-2 text-left text-sm transition-colors duration-150 hover:bg-surface-hover motion-reduce:transition-none pointer-coarse:min-h-11", pickerFocusClassName)}
                     aria-label="选择模型 Logo"
                     aria-haspopup="dialog"
                     aria-expanded={open}
@@ -171,7 +171,7 @@ export function ModelIconPicker({ value, onChange }: { value?: string; onChange?
                                         key={item.id}
                                         type="button"
                                         className={cn(
-                                            "flex min-h-10 items-center gap-2.5 rounded-md px-3 py-2 text-left text-[length:var(--typ-caption)] text-muted-foreground hover:bg-surface-hover hover:text-foreground aria-pressed:bg-[var(--control-selected-bg)] aria-pressed:text-[var(--control-selected-fg)] max-[520px]:flex-1 max-[520px]:justify-center max-[520px]:gap-1 max-[520px]:px-1 pointer-coarse:min-h-11",
+                                            "flex min-h-10 items-center gap-2.5 rounded-md px-3 py-2 text-left text-[length:var(--typ-caption)] text-muted-foreground transition-colors duration-150 hover:bg-surface-hover hover:text-foreground aria-pressed:bg-[var(--control-selected-bg)] aria-pressed:text-[var(--control-selected-fg)] max-[520px]:flex-1 max-[520px]:justify-center max-[520px]:gap-1 max-[520px]:px-1 motion-reduce:transition-none pointer-coarse:min-h-11",
                                             pickerFocusClassName,
                                         )}
                                         aria-pressed={query ? item.id === "all" : category === item.id}
@@ -206,7 +206,7 @@ export function ModelIconPicker({ value, onChange }: { value?: string; onChange?
                                                         aria-pressed={selected}
                                                         aria-label={`选择 ${item.label}`}
                                                         className={cn(
-                                                            "relative flex h-full min-h-16 w-full flex-col items-center justify-center gap-1 rounded-md border border-transparent px-1 py-2 hover:bg-surface-hover aria-pressed:border-[var(--control-selected-border)] aria-pressed:bg-[var(--control-selected-bg)] aria-pressed:text-[var(--control-selected-fg)]",
+                                                            "relative flex h-full min-h-16 w-full flex-col items-center justify-center gap-1 rounded-md border border-transparent px-1 py-2 transition-colors duration-150 hover:bg-surface-hover aria-pressed:border-[var(--control-selected-border)] aria-pressed:bg-[var(--control-selected-bg)] aria-pressed:text-[var(--control-selected-fg)] motion-reduce:transition-none",
                                                             pickerFocusClassName,
                                                         )}
                                                         onClick={() => {
